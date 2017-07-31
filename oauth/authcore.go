@@ -25,8 +25,14 @@ func (ah *AuthHandler) RedirectNeed(r *http.Request) bool {
 	return r.URL.Query().Get("code") == ""
 }
 
+func (ah *AuthHandler) RedirectError(r *http.Request) bool {
+	return r.URL.Query().Get("error") != ""
+}
+
 func (ah *AuthHandler) Redirect(w http.ResponseWriter, r *http.Request) error {
-	if ah.RedirectNeed(r) {
+	if ah.RedirectError(r) {
+		return errors.New("error")
+	} else if ah.RedirectNeed(r) {
 		var redictUrl string
 		reg, _ := regexp.Compile("(http://|https://)?([^/]*)")
 		ah.Client.GetData().Referer = reg.FindString(r.Referer())
@@ -82,7 +88,14 @@ func (ah *AuthHandler) GetUser(w http.ResponseWriter, r *http.Request) (*provide
 func (ah *AuthHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	err := ah.Redirect(w, r)
 	if err != nil {
-		(*ah.Client.GetError()).SetErrorJson(err.Error())
+		jsonErr := json.Unmarshal([]byte(err.Error()), ah.Client.GetError())
+		if jsonErr != nil {
+			if ah.RedirectError(r) {
+				(*ah.Client.GetError()).HttpErrToJson(r)
+			} else {
+				(*ah.Client.GetError()).SetError(err.Error())
+			}
+		}
 		ResultData.Error = *ah.Client.GetError()
 	}
 	if ResultData.User != nil || ResultData.Error != nil {

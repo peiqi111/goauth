@@ -1,5 +1,9 @@
 package provider
 
+import (
+	"net/http"
+)
+
 var OAuthProvider map[string]Client
 
 type Result struct {
@@ -20,9 +24,9 @@ type User interface {
 }
 
 type Error interface {
-	GetErrorDes() string
-	GetErrorJson() string
-	SetErrorJson(err string)
+	GetError() string
+	SetError(err string)
+	HttpErrToJson(r *http.Request)
 }
 
 type Client interface {

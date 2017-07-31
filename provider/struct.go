@@ -3,7 +3,7 @@ package provider
 type OAuthConfig struct {
 	ClientId     string `json:"id|key"`
 	ClientSecret string `json:"secret"`
-	CallbackUri  string `json:"redict"`
+	CallbackUri  string `json:"callback"`
 	Scope        string `json:"scope"`
 	AuthResUri   string `json:"authres"`
 }

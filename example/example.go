@@ -30,8 +30,7 @@ func Home(w http.ResponseWriter, r *http.Request) {
 
 func GetRes(w http.ResponseWriter, r *http.Request, res provider.Result) {
 	if res.Error != nil {
-		fmt.Fprintf(w, "error_des:"+res.Error.GetErrorDes())
-		fmt.Fprintf(w, "error:"+res.Error.GetErrorJson())
+		fmt.Fprintf(w, "error:"+res.Error.GetError())
 	} else {
 		fmt.Fprintf(w, "Id:"+res.User.Id())
 		fmt.Fprintf(w, ",Provider:"+res.User.Provider())
@@ -49,8 +48,8 @@ func main() {
 	auth.Auth(`{
 		"github":{
 			"id|key": "65c96526e1c87099ea6c",
-			"secret": "16f60d4e69b7397cd12342cd6304f8ac4846dbc1",
-			"redict": "/redict/github",
+			"secret": "16f60d4e69b7397cd12342cd6304f8ac4846dbc3",
+			"callback": "/redict/github",
 			"scope" : "user",
 			"authres": "/redict/login"
 		}
