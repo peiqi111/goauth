@@ -20,7 +20,7 @@ func init() {
 	}
 }
 
-func Auth(jsonStr string) error {
+func Auth(jsonStr string) {
 	json.Unmarshal([]byte(jsonStr), &Config)
 	for name, _ := range Config {
 		if AuthHandles[name] != nil {
@@ -33,7 +33,6 @@ func Auth(jsonStr string) error {
 			http.Handle(Config[name].CallbackUri, AuthHandles[name])
 		}
 	}
-	return nil
 }
 
 func ResHandlerFunc(userHandler ResHandler) http.HandlerFunc {
