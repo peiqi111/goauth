@@ -21,8 +21,7 @@ var homepage = `
 			<a href="/redict/github"><span style="background-image:url(icon/icon.svg);width:28px;height:28px;background-repeat:no-repeat;display:inline-block;background-position:-28px -28px;"></span></a>
 		</div>
 	</body>
-</html>
-`
+</html>`
 
 func Home(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, homepage)
