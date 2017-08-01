@@ -31,7 +31,7 @@ func (ah *AuthHandler) RedirectError(r *http.Request) bool {
 
 func (ah *AuthHandler) Redirect(w http.ResponseWriter, r *http.Request) error {
 	if ah.RedirectError(r) {
-		return errors.New("error")
+		return errors.New("error report by http")
 	} else if ah.RedirectNeed(r) {
 		var redictUrl string
 		reg, _ := regexp.Compile("(http://|https://)?([^/]*)")
