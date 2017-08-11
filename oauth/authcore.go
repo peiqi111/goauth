@@ -22,19 +22,19 @@ func (ah *AuthHandler) GetClient() *provider.Client {
 }
 
 func (ah *AuthHandler) RedirectNeed(r *http.Request) bool {
-	return r.URL.Query().Get("code") == ""
+	return r.URL.Query().Get(`code`) == ``
 }
 
 func (ah *AuthHandler) RedirectError(r *http.Request) bool {
-	return r.URL.Query().Get("error") != ""
+	return r.URL.Query().Get(`error`) != ``
 }
 
 func (ah *AuthHandler) Redirect(w http.ResponseWriter, r *http.Request) error {
 	if ah.RedirectError(r) {
-		return errors.New("error report by http")
+		return errors.New(`error report by http`)
 	} else if ah.RedirectNeed(r) {
 		var redictUrl string
-		reg, _ := regexp.Compile("(http://|https://)?([^/]*)")
+		reg, _ := regexp.Compile(`(http://|https://)?([^/]*)`)
 		ah.Client.GetData().Referer = reg.FindString(r.Referer())
 		redictUrl, state = ah.Client.GetCodeUrl()
 		http.Redirect(w, r, redictUrl, http.StatusFound)
@@ -54,8 +54,8 @@ func (ah *AuthHandler) Redirect(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (ah *AuthHandler) GetAccessToken(w http.ResponseWriter, r *http.Request) error {
-	if r.URL.Query().Get("state") == state {
-		ah.Client.GetData().Code = r.URL.Query().Get("code")
+	if r.URL.Query().Get(`state`) == state {
+		ah.Client.GetData().Code = r.URL.Query().Get(`code`)
 		AccessTokenStr, err := utils.GetUrlData(ah.Client.GetTokenUrl())
 		if err != nil {
 			return err
@@ -68,13 +68,17 @@ func (ah *AuthHandler) GetAccessToken(w http.ResponseWriter, r *http.Request) er
 			return errors.New(string(AccessTokenStr))
 		}
 	} else {
-		return errors.New("The state code we recevied is not matched with the state code we sent to the Github.")
+		return errors.New(`The state code we recevied is not matched with the state code we sent to the Github.`)
 	}
 	return nil
 }
 
 func (ah *AuthHandler) GetUser(w http.ResponseWriter, r *http.Request) (*provider.User, error) {
 	UserStr, err := utils.GetUrlData(ah.Client.GetUserUrl())
+	err = json.Unmarshal(UserStr, ah.Client.GetError())
+	if (*ah.Client.GetError()).GetError() != `` {
+		return nil, errors.New((*ah.Client.GetError()).GetError())
+	}
 	if err != nil {
 		return nil, err
 	}

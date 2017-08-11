@@ -3,7 +3,6 @@ package main
 import (
 	auth "github.com/peiqi/goauth"
 	provider "github.com/peiqi/goauth/provider"
-	utils "github.com/peiqi/goauth/utils"
 
 	"fmt"
 	"net/http"
@@ -31,16 +30,16 @@ func Home(w http.ResponseWriter, r *http.Request) {
 
 func GetRes(w http.ResponseWriter, r *http.Request, res provider.Result) {
 	if res.Error != nil {
-		fmt.Fprintf(w, "error:"+res.Error.GetError())
+		fmt.Fprintf(w, `error:`+res.Error.GetError())
 	} else {
-		fmt.Fprintf(w, "Id:"+res.User.Id())
-		fmt.Fprintf(w, ",Provider:"+res.User.Provider())
-		fmt.Fprintf(w, ",Name:"+res.User.Name())
-		fmt.Fprintf(w, ",Email:"+res.User.Email())
-		fmt.Fprintf(w, ",Picture:"+res.User.Picture())
-		fmt.Fprintf(w, ",Link:"+res.User.Link())
-		fmt.Fprintf(w, ",Bio:"+res.User.Bio())
-		fmt.Fprintf(w, ",Location:"+res.User.Location())
+		fmt.Fprintf(w, `Id:`+res.User.Id())
+		fmt.Fprintf(w, `,Provider:`+res.User.Provider())
+		fmt.Fprintf(w, `,Name:`+res.User.Name())
+		fmt.Fprintf(w, `,Email:`+res.User.Email())
+		fmt.Fprintf(w, `,Picture:`+res.User.Picture())
+		fmt.Fprintf(w, `,Link:`+res.User.Link())
+		fmt.Fprintf(w, `,Bio:`+res.User.Bio())
+		fmt.Fprintf(w, `,Location:`+res.User.Location())
 	}
 }
 
@@ -61,11 +60,11 @@ func main() {
 			"authres": "/redict/login"
 		}
 	}`)
-	fmt.Println("goauth demo starting on port 8080")
-	http.Handle("/icon/", http.StripPrefix("/icon/", http.FileServer(http.Dir("./icon"))))
-	http.HandleFunc("/home", Home)
-	http.HandleFunc("/redict/login", auth.ResHandlerFunc(GetRes))
-	http.ListenAndServe(":8080", nil)
+	fmt.Println(`goauth demo starting on port 8080`)
+	http.Handle(`/icon/`, http.StripPrefix(`/icon/`, http.FileServer(http.Dir(`./icon`))))
+	http.HandleFunc(`/home`, Home)
+	http.HandleFunc(`/redict/login`, auth.ResHandlerFunc(GetRes))
+	http.ListenAndServe(`:8080`, nil)
 }
 
 // ,
