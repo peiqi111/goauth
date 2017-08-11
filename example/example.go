@@ -3,6 +3,7 @@ package main
 import (
 	auth "github.com/peiqi/goauth"
 	provider "github.com/peiqi/goauth/provider"
+	utils "github.com/peiqi/goauth/utils"
 
 	"fmt"
 	"net/http"
@@ -19,6 +20,7 @@ var homepage = `
 		</div>
 		<div style="display:block">
 			<a href="/redict/github"><span style="background-image:url(icon/icon.svg);width:28px;height:28px;background-repeat:no-repeat;display:inline-block;background-position:-28px -28px;"></span></a>
+			<a href="/redict/google"><span style="background-image:url(icon/icon.svg);width:28px;height:28px;background-repeat:no-repeat;display:inline-block;background-position:0px -28px;"></span></a>
 		</div>
 	</body>
 </html>`
@@ -35,7 +37,6 @@ func GetRes(w http.ResponseWriter, r *http.Request, res provider.Result) {
 		fmt.Fprintf(w, ",Provider:"+res.User.Provider())
 		fmt.Fprintf(w, ",Name:"+res.User.Name())
 		fmt.Fprintf(w, ",Email:"+res.User.Email())
-		fmt.Fprintf(w, ",Org:"+res.User.Org())
 		fmt.Fprintf(w, ",Picture:"+res.User.Picture())
 		fmt.Fprintf(w, ",Link:"+res.User.Link())
 		fmt.Fprintf(w, ",Bio:"+res.User.Bio())
@@ -50,6 +51,13 @@ func main() {
 			"secret": "16f60d4e69b7397cd12342cd6304f8ac4846dbc3",
 			"callback": "/redict/github",
 			"scope" : "user",
+			"authres": "/redict/login"
+		},
+		"google":{
+			"id|key": "842371556982-ke4vsrhh5se7p3900466ingqgm5lc13b.apps.googleusercontent.com",
+			"secret": "ahM0zZf2KPFIo3nDDM40KnyU",
+			"callback": "/redict/google",
+			"scope" : "openid email profile",
 			"authres": "/redict/login"
 		}
 	}`)

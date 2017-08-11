@@ -17,7 +17,6 @@ type GitHubUser struct {
 	UserEmail    string `json:"email"`
 	UserName     string `json:"name"`
 	UserGravatar string `json:"gravatar_id"`
-	UserCompany  string `json:"company"`
 	UserLink     string `json:"html_url"`
 	UserLogin    string `json:"login"`
 	UserBio      string `json:"bio"`
@@ -28,7 +27,6 @@ func (u *GitHubUser) Id() string       { return u.UserLogin }
 func (u *GitHubUser) Provider() string { return "github.com" }
 func (u *GitHubUser) Name() string     { return u.UserName }
 func (u *GitHubUser) Email() string    { return u.UserEmail }
-func (u *GitHubUser) Org() string      { return u.UserCompany }
 func (u *GitHubUser) Picture() string  { return "https://secure.gravatar.com/avatar/" + u.UserGravatar }
 func (u *GitHubUser) Link() string     { return u.UserLink }
 func (u *GitHubUser) Bio() string      { return u.UserBio }
@@ -67,7 +65,7 @@ func (this *GitHubClient) GetUser() *User { return &this.User }
 func (this *GitHubClient) GetError() *Error { return &this.Error }
 
 func (this *GitHubClient) GetCodeUrl() (string, string) {
-	state := utils.GetState()
+	state := utils.GetState(16)
 	codeUrl := url.Values{}
 	codeUrl.Set("client_id", this.ClientData.ClientId)
 	codeUrl.Set("redirect_uri", this.ClientData.Referer+this.ClientData.CallbackUri)

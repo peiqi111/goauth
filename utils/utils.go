@@ -1,17 +1,20 @@
 package utils
 
 import (
+	crand "crypto/rand"
+	"fmt"
 	"io/ioutil"
-	"math/rand"
 	"net/http"
 	"net/url"
-	"strconv"
-	"time"
 )
 
-func GetState() string {
-	var stateGenerator = rand.New(rand.NewSource(time.Now().Unix()))
-	return strconv.FormatInt(stateGenerator.Int63(), 10)
+func GetState(length int) string {
+	randomBytes := make([]byte, length)
+	_, err := crand.Read(randomBytes)
+	if err != nil {
+		panic(err)
+	}
+	return fmt.Sprintf("%x", randomBytes)
 }
 
 func GetUrlData(inputUrl string, method string) ([]byte, error) {

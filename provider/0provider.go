@@ -16,7 +16,6 @@ type User interface {
 	Provider() string
 	Name() string
 	Email() string
-	Org() string
 	Picture() string
 	Link() string
 	Bio() string
